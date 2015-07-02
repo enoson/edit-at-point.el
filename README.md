@@ -2,6 +2,7 @@
 edit(copy,cut...) things(word,symbol..) under cursor, if failed to find the thing, move backward until buffer beginning.
 
 # sample keybinding config
+```
 (require 'edit-at-point)
 (require 'bind-key)
 (bind-keys
@@ -34,6 +35,6 @@ edit(copy,cut...) things(word,symbol..) under cursor, if failed to find the thin
   ("C-{"  . edit-at-point-defun-delete)
   ("C-:"  . edit-at-point-defun-paste)
   ("C-\"" . edit-at-point-defun-dup))
-
+```
 # license
 Released under the MIT license
