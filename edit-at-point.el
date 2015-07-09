@@ -1,4 +1,4 @@
-;;; edit-at-point.el --- edit current things(word,symbol..) under cursor
+;;; edit-at-point.el --- edit(copy,cut..) current things(word,symbol..) under cursor
 
 ;; Author: <e.enoson@gmail.com>
 ;; URL: http://github.com/enoson/edit-at-point.el
@@ -23,9 +23,9 @@
 ;;   ("C-S-g". edit-at-point-symbol-delete)
 ;;   ("C-S-h". edit-at-point-symbol-paste)
 ;;   ("C-S-i". edit-at-point-str-copy)
-;;   ("C-S-i". edit-at-point-str-cut)
-;;   ("C-S-i". edit-at-point-str-delete)
-;;   ("C-S-i". edit-at-point-str-paste)
+;;   ("C-S-j". edit-at-point-str-cut)
+;;   ("C-S-k". edit-at-point-str-delete)
+;;   ("C-S-l". edit-at-point-str-paste)
 ;;   ("C-S-m". edit-at-point-line-copy)
 ;;   ("C-S-n". edit-at-point-line-cut)
 ;;   ("C-S-o". edit-at-point-line-delete)
@@ -186,6 +186,10 @@
   (interactive)
   (edit-paren-at-point 'delete-region))
 
+(defun edit-at-point-paren-comment ()
+  (interactive)
+  (edit-paren-at-point 'comment-or-uncomment-region))
+
 (defun edit-at-point-paren-paste ()
   (interactive)
   (edit-at-point-paren-delete)
@@ -193,14 +197,13 @@
 
 (defun edit-at-point-paren-dup ()
   (interactive)
-  (if (is-newline-at-point)
-      (setq nl t))
+  (setq nl (is-newline-at-point))
   (edit-at-point-paren-copy)
   (goto-str-beg)
   (ignore-errors (up-list))
   (newline-and-indent)
-  (if (boundp 'nl) (newline-and-indent))
-  (yank))
+  (yank)
+  (if nl (newline-and-indent)))
 
 (defun edit-at-point-defun-copy ()
   (interactive)
