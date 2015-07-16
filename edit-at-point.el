@@ -2,7 +2,7 @@
 
 ;; Author: <e.enoson@gmail.com>
 ;; URL: http://github.com/enoson/edit-at-point.el
-;; Version: 1.0
+;; Version: 1.1
 
 ;;; Commentary:
 
@@ -11,7 +11,6 @@
 ;; move up/down : line
 
 ;; sample keybinding config:
-;; (require 'edit-at-point)
 ;; (require 'bind-key)
 ;; (bind-keys
 ;;   ("C-S-a". edit-at-point-word-copy)
@@ -52,35 +51,43 @@
     (backward-char))
   (funcall action (car b) (cdr b)))
 
+;;;###autoload
 (defun edit-at-point-word-copy ()
   (interactive)
   (edit-at-point 'word 'kill-ring-save))
 
+;;;###autoload
 (defun edit-at-point-word-cut ()
   (interactive)
   (edit-at-point 'word 'kill-region))
 
+;;;###autoload
 (defun edit-at-point-word-delete ()
   (interactive)
   (edit-at-point 'word 'delete-region))
 
+;;;###autoload
 (defun edit-at-point-word-paste ()
   (interactive)
   (edit-at-point-word-delete)
   (yank))
 
+;;;###autoload
 (defun edit-at-point-symbol-copy ()
   (interactive)
   (edit-at-point 'symbol 'kill-ring-save))
 
+;;;###autoload
 (defun edit-at-point-symbol-cut ()
   (interactive)
   (edit-at-point 'symbol 'kill-region))
 
+;;;###autoload
 (defun edit-at-point-symbol-delete ()
   (interactive)
   (edit-at-point 'symbol 'delete-region))
 
+;;;###autoload
 (defun edit-at-point-symbol-paste ()
   (interactive)
   (edit-at-point-symbol-delete)
@@ -97,39 +104,47 @@
     (goto-char (nth 8 (syntax-ppss)))
     (edit-at-point 'sexp action)))
 
+;;;###autoload
 (defun edit-at-point-str-copy ()
   (interactive)
   (edit-str-at-point 'kill-ring-save))
 
+;;;###autoload
 (defun edit-at-point-str-cut ()
   (interactive)
   (edit-str-at-point 'kill-region))
 
+;;;###autoload
 (defun edit-at-point-str-delete ()
   (interactive)
   (edit-str-at-point 'delete-region))
 
+;;;###autoload
 (defun edit-at-point-str-paste ()
   (interactive)
   (edit-at-point-str-delete)
   (yank))
 
+;;;###autoload
 (defun edit-at-point-line-copy ()
   (interactive)
   (edit-at-point 'line 'kill-ring-save))
 
+;;;###autoload
 (defun edit-at-point-line-cut ()
   (interactive)
   (setq c (current-column))
   (edit-at-point 'line 'kill-region)
   (move-to-column c))
 
+;;;###autoload
 (defun edit-at-point-line-delete ()
   (interactive)
   (setq c (current-column))
   (edit-at-point 'line 'delete-region)
   (move-to-column c))
 
+;;;###autoload
 (defun edit-at-point-line-paste ()
   (interactive)
   (setq c (current-column))
@@ -137,6 +152,7 @@
   (yank)
   (move-to-column c))
 
+;;;###autoload
 (defun edit-at-point-line-dup ()
   (interactive)
   (save-excursion
@@ -144,6 +160,7 @@
     (beginning-of-line)
     (yank)))
 
+;;;###autoload
 (defun edit-at-point-line-down (arg)
   (interactive "p")
   (setq c (current-column))
@@ -153,15 +170,15 @@
   (if arg (forward-line -1))
   (move-to-column c))
 
+;;;###autoload
 (defun edit-at-point-line-up ()
   (interactive)
   (edit-at-point-line-down -1))
 
-(defun is-newline-at-point ()
+(defun --is-newline-at-point ()
   (or (not (char-after)) (= 10 (char-after))))
 
-(defun goto-str-beg ()
-  (interactive)
+(defun --goto-str-beg ()
   (let ((s (syntax-ppss)))
     (if (nth 3 s)
         (goto-char (nth 8 s)))))
@@ -170,58 +187,69 @@
   (setq char (char-after))
   (if (member char (string-to-list "([{"))
       (forward-char))
-  (goto-str-beg)
+  (--goto-str-beg)
   (edit-at-point 'list action))
 
+;;;###autoload
 (defun edit-at-point-paren-copy ()
   (interactive)
   (save-excursion (edit-paren-at-point 'kill-ring-save)
                   (princ (list-at-point))))
 
+;;;###autoload
 (defun edit-at-point-paren-cut ()
   (interactive)
   (edit-paren-at-point 'kill-region))
 
+;;;###autoload
 (defun edit-at-point-paren-delete ()
   (interactive)
   (edit-paren-at-point 'delete-region))
 
+;;;###autoload
 (defun edit-at-point-paren-comment ()
   (interactive)
   (edit-paren-at-point 'comment-or-uncomment-region))
 
+;;;###autoload
 (defun edit-at-point-paren-paste ()
   (interactive)
   (edit-at-point-paren-delete)
   (yank))
 
+;;;###autoload
 (defun edit-at-point-paren-dup ()
   (interactive)
-  (setq nl (is-newline-at-point))
+  (setq nl (--is-newline-at-point))
   (edit-at-point-paren-copy)
-  (goto-str-beg)
+  (--goto-str-beg)
   (ignore-errors (up-list))
   (newline-and-indent)
   (yank)
   (if nl (newline-and-indent)))
 
+;;;###autoload
 (defun edit-at-point-defun-copy ()
   (interactive)
   (edit-at-point 'defun 'kill-ring-save))
 
+;;;###autoload
 (defun edit-at-point-defun-cut ()
   (interactive)
   (edit-at-point 'defun 'kill-region))
 
+;;;###autoload
 (defun edit-at-point-defun-delete ()
   (interactive)
   (edit-at-point 'defun 'delete-region))
 
+;;;###autoload
 (defun edit-at-point-defun-paste ()
   (interactive)
   (edit-at-point-defun-delete)
   (yank))
 
+;;;###autoload
 (defun edit-at-point-defun-dup ()
   (interactive)
   (edit-at-point-defun-copy)
