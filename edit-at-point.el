@@ -1,6 +1,7 @@
 ;;; edit-at-point.el --- edit(copy,cut..) current things(word,symbol..) under cursor
 
 ;; Author: <e.enoson@gmail.com>
+;; License: MIT
 ;; URL: http://github.com/enoson/edit-at-point.el
 ;; Version: 1.1
 
